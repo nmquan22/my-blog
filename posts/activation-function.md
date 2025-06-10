@@ -49,6 +49,7 @@ Tầng ẩn (`h`) được phi tuyến hóa nhờ ReLU (hoặc các hàm khác),
 ---
 
 - **ReLU (Rectified Linear Unit)**:  
+  ![ReLU image](/images/ReLU.png)
   $$
   \text{ReLU}(x) = \max(0, x)
   $$
@@ -82,6 +83,7 @@ Tầng ẩn (`h`) được phi tuyến hóa nhờ ReLU (hoặc các hàm khác),
 ---
 
 - **ELU (Exponential Linear Unit)**:  
+  ![ELU image](/images/ELU.png)
   $$
   \text{ELU}(x) =
   \begin{cases}
@@ -100,6 +102,7 @@ Tầng ẩn (`h`) được phi tuyến hóa nhờ ReLU (hoặc các hàm khác),
 ---
 
 - **Sigmoid**:  
+  ![sigmoid image](/images/sigmoid.png)
   $$
   \sigma(x) = \frac{1}{1 + e^{-x}}
   $$
@@ -142,8 +145,101 @@ Tầng ẩn (`h`) được phi tuyến hóa nhờ ReLU (hoặc các hàm khác),
 
 ---
 
+## 5. Khai triển taylor 
 
-## 5. Kết luận
+Khai triển Taylor (Taylor Expansion) là một kỹ thuật toán học dùng để xấp xỉ một hàm số bằng đa thức quanh một điểm. Trong học máy và deep learning, khai triển Taylor thường được dùng để:
+
+- Giải thích cách một hàm số thay đổi xung quanh điểm gốc.
+- Phân tích gradient và tối ưu hàm mất mát.
+
+**Công thức tổng quát:**
+
+$$
+f(x) = f(a) + f'(a)(x - a) + \frac{f''(a)}{2!}(x - a)^2 + \frac{f^{(3)}(a)}{3!}(x - a)^3 + \dots
+$$
+
+Trong đó:
+- $f^{(n)}(a)$ là đạo hàm bậc $n$ tại điểm $a$.
+- Với $a = 0$, ta được khai triển **Maclaurin**.
+
+**Ví dụ**:
+
+- $e^x = 1 + x + \frac{x^2}{2!} + \frac{x^3}{3!} + \dots$
+- $\sin(x) = x - \frac{x^3}{3!} + \frac{x^5}{5!} - \dots$
+
+**Code cho hàm sin**:
+```python
+import math
+
+def factorial_fcn(n):
+    """Tính giai thừa của n"""
+    return math.factorial(n)
+
+def approx_sin(x, n):
+    """
+    Approximate the sine of x using the Taylor series expansion.
+
+    Parameters:
+    x (float): The input angle in radians.
+    n (int): Number of terms in the Taylor series expansion.
+
+    Returns:
+    float: Approximate value of sin(x) using n+1 terms.
+    """
+    sin_approx = 0
+    for i in range(n + 1):
+        coef = (-1) ** i
+        num = x ** (2 * i + 1)
+        denom = factorial_fcn(2 * i + 1)
+        sin_approx += coef * (num / denom)
+
+    return sin_approx
+
+# Ví dụ sử dụng
+print(round(approx_sin(x=3.14, n=10), 4))
+
+```
+---
+
+## 6. F-Score matrix & F1-Score
+
+F-Score là chỉ số cân bằng giữa **Precision** và **Recall**, thường dùng trong bài toán phân loại, đặc biệt là với dữ liệu mất cân bằng.
+
+### **Confusion Matrix (Ma trận nhầm lẫn)**
+
+|               | **Dự đoán: Positive** | **Dự đoán: Negative** |
+|---------------|------------------------|------------------------|
+| **Thực tế: Positive** | TP (True Positive)      | FN (False Negative)     |
+| **Thực tế: Negative** | FP (False Positive)     | TN (True Negative)      |
+
+---
+
+### **Precision (Độ chính xác)**
+
+$$
+\text{Precision} = \frac{TP}{TP + FP}
+$$
+
+---
+
+### **Recall (Độ bao phủ)**
+
+$$
+\text{Recall} = \frac{TP}{TP + FN}
+$$
+
+---
+
+### **F1-Score**
+
+$$
+F_1 = 2 \cdot \frac{\text{Precision} \cdot \text{Recall}}{\text{Precision} + \text{Recall}}
+$$
+
+---
+
+
+## 7. Kết luận
 
 Hàm kích hoạt là một **thành phần không thể thiếu** trong neural networks. Chúng cho phép mô hình:
 
